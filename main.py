@@ -7,15 +7,6 @@ st.write("API key loaded:", os.getenv("OPENAI_API_KEY") is not None)
 
 
 
-st.set_page_config(page_title="Maths Tutor Test", page_icon="📐")
-
-st.title("📐 Maths Tutor Backend Test")
-st.write("If you can see this running on Streamlit, everything is working!")
-
-name = st.text_input("Enter your name:")
-
-if st.button("Say hello"):
-    st.success(f"Hello {name}, your backend is working!")
 
 
 def generate_worksheet(topic: str, question: str) -> str:
@@ -95,3 +86,100 @@ with col4:
 
 with col5:
     honours_worksheet_btn = st.button("Honours Questions")
+    
+    
+    
+# ---------------------------------------------------------
+#  PROCESS FULL SOLUTION / HINTS
+# ---------------------------------------------------------
+if (full_solution_btn or hints_btn) and question.strip():
+
+    with st.spinner("Thinking..."):
+        answer = call_llm(f"Topic: {topic}\nQuestion: {question}")
+
+    st.session_state["full_answer"] = answer
+    steps = [s.strip() for s in answer.split("STEP") if s.strip()]
+    st.session_state["steps"] = steps
+    st.session_state["current_step"] = 0
+
+
+# ---------------------------------------------------------
+#  FULL SOLUTION MODE
+# ---------------------------------------------------------
+if full_solution_btn and "full_answer" in st.session_state:
+    st.markdown("### Full Solution")
+    st.markdown(st.session_state["full_answer"])
+
+
+# ---------------------------------------------------------
+#  HINTS MODE
+# ---------------------------------------------------------
+if hints_btn and "steps" in st.session_state:
+    st.markdown("### Step-by-step Hints")
+    st.markdown("STEP " + st.session_state["steps"][0])
+    st.session_state["current_step"] = 1
+
+
+# ---------------------------------------------------------
+#  SHOW NEXT HINT BUTTON
+# ---------------------------------------------------------
+if "steps" in st.session_state and st.session_state["current_step"] > 0:
+
+    if st.session_state["current_step"] < len(st.session_state["steps"]):
+        if st.button("Show next hint"):
+            st.markdown("STEP " + st.session_state["steps"][st.session_state["current_step"]])
+            st.session_state["current_step"] += 1
+    else:
+        st.success("You've reached the final answer.")
+
+
+# ---------------------------------------------------------
+#  NORMAL WORKSHEET
+# ---------------------------------------------------------
+if worksheet_btn and question.strip():
+    with st.spinner("Generating worksheet..."):
+        worksheet = generate_worksheet(topic, question)
+
+    questions = re.findall(r"\d+\.\s.*", worksheet)
+    st.session_state["worksheet_questions"] = questions
+    st.markdown("## 📄 Worksheet: Similar Questions")
+
+
+# ---------------------------------------------------------
+#  HARD WORKSHEET
+# ---------------------------------------------------------
+if hard_worksheet_btn and question.strip():
+    with st.spinner("Generating harder questions..."):
+        worksheet = generate_harder_worksheet(topic, question)
+
+    questions = re.findall(r"\d+\.\s.*", worksheet)
+    st.session_state["worksheet_questions"] = questions
+    st.markdown("## 🔥 Harder Worksheet: Advanced Questions")
+
+
+# ---------------------------------------------------------
+#  HONOURS WORKSHEET (OPTION B)
+# ---------------------------------------------------------
+if honours_worksheet_btn and question.strip():
+    with st.spinner("Generating honours-level questions..."):
+        worksheet = generate_honours_worksheet(topic, question)
+
+    questions = re.findall(r"\d+\.\s.*", worksheet)
+    st.session_state["worksheet_questions"] = questions
+    st.markdown("## 🏅 Honours-Level Worksheet: Exam-Style Difficulty")
+
+
+# ---------------------------------------------------------
+#  DISPLAY WORKSHEET + ANSWER BUTTONS
+# ---------------------------------------------------------
+if "worksheet_questions" in st.session_state:
+
+    for i, q in enumerate(st.session_state["worksheet_questions"]):
+        st.markdown(f"### Question {i+1}")
+        st.markdown(q)
+
+        if st.button(f"Show Answer to Q{i+1}"):
+            with st.spinner("Solving..."):
+                answer = solve_single_question(q)
+            st.markdown(f"**Answer to Question {i+1}:**")
+            st.markdown(answer)
