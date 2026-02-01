@@ -17,7 +17,8 @@ def call_openai(client, system_prompt, user_prompt):
             {"role": "user", "content": user_prompt}
         ]
     )
-    return response.choices[0].message["content"]
+    response.choices[0].message.content
+
 
 
 # -----------------------------
