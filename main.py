@@ -53,3 +53,24 @@ Now generate the worksheet:
     )
 
     return response.choices[0].message.content
+    
+    
+    
+# ---------------------------------------------------------
+#  STREAMLIT UI
+# ---------------------------------------------------------
+st.set_page_config(page_title="Leaving Cert HL Maths Tutor", page_icon="📐")
+
+st.title("📐 Leaving Cert Higher Level Maths Tutor")
+st.write("Choose **Full Solution**, **Hints Mode**, or generate a **Worksheet** of similar, harder, or honours-level questions.")
+
+topic = st.selectbox(
+    "Choose a topic:",
+    ["Probability", "Algebra", "Calculus", "Trigonometry", "The Circle"],
+)
+
+question = st.text_area(
+    "Enter your question:",
+    placeholder="e.g. What is the probability of picking a red ace from a pack of cards?",
+    height=150,
+)
