@@ -74,3 +74,24 @@ question = st.text_area(
     placeholder="e.g. What is the probability of picking a red ace from a pack of cards?",
     height=150,
 )
+
+
+# ---------------------------------------------------------
+#  BUTTONS
+# ---------------------------------------------------------
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    full_solution_btn = st.button("Full Solution")
+
+with col2:
+    hints_btn = st.button("Hints Mode")
+
+with col3:
+    worksheet_btn = st.button("Generate Worksheet")
+
+with col4:
+    hard_worksheet_btn = st.button("Harder Questions")
+
+with col5:
+    honours_worksheet_btn = st.button("Honours Questions")
