@@ -1,5 +1,11 @@
 import streamlit as st
 
+import os
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
 st.set_page_config(page_title="Maths Tutor Test", page_icon="📐")
 
 st.title("📐 Maths Tutor Backend Test")
