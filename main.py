@@ -119,7 +119,7 @@ def generate_balanced_worksheet(topic, subtopics):
 
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Generate ONE exam‑style question for EACH of the selected subtopics. "
+        "Generate ONE exam‑style question for EACH of the subtopics of the selected topic. "
         "Use LaTeX formatting for all mathematical expressions, wrapped in $$ ... $$. "
         "Ensure each question is unique and non‑repetitive. "
         "Return them as a numbered list, one per line, no solutions."
