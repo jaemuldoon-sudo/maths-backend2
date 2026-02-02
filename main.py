@@ -68,15 +68,23 @@ def generate_worksheet(topic, subtopics, difficulty):
         "Every time you are asked, produce a completely different set. "
         f"Difficulty level: {difficulty}. "
         f"Focus ONLY on these subtopics: {chosen}. "
-        "Use LaTeX formatting for ALL mathematical expressions, wrapped in $$ ... $$. "
+        "Use LaTeX formatting for ALL mathematical expressions. "
+        "Wrap EVERY LaTeX expression in double dollar signs $$ ... $$. "
+        "Do NOT output plain text maths like x^2, 1/6, sqrt(x), etc. "
+        "Only output LaTeX maths. "
         "Return the questions as a numbered list, one per line, no solutions."
     )
 
-    user_prompt = f"Create a {difficulty} worksheet on {topic} covering: {chosen}"
+    user_prompt = (
+        f"Create a {difficulty} worksheet on {topic} "
+        f"covering the following subtopics: {chosen}. "
+        "Ensure ALL maths is in LaTeX wrapped in $$ ... $$."
+    )
 
     text = call_openai(system_prompt, user_prompt)
     questions = [q.strip() for q in text.split('\n') if q.strip()]
     return questions
+
 
 
 
