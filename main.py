@@ -6,6 +6,39 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 st.title("Maths Tutor – Worksheet with Difficulty Levels")
 
+SUBTOPICS = {
+    "Probability": [
+        "Combined events",
+        "Conditional probability",
+        "Expected value",
+        "Permutations and combinations",
+        "Binomial distribution"
+    ],
+    "Trigonometry": [
+        "Trig identities",
+        "Trig equations",
+        "Graphs",
+        "Radians",
+        "Sine rule / Cosine rule"
+    ],
+    "Algebra": [
+        "Quadratics",
+        "Functions",
+        "Logs",
+        "Sequences & series",
+        "Inequalities"
+    ],
+    "Calculus": [
+        "Differentiation",
+        "Integration",
+        "Rates of change",
+        "Area under curves",
+        "Product/Quotient/Chain rule"
+    ]
+}
+
+
+
 
 # ---------------------------------------------------------
 # 1. Shared OpenAI call
@@ -24,23 +57,25 @@ def call_openai(system_prompt, user_prompt):
 # ---------------------------------------------------------
 # 2. Generate worksheet (returns list of questions)
 # ---------------------------------------------------------
-def generate_worksheet(topic, difficulty):
+def generate_worksheet(topic, subtopics, difficulty):
+    chosen = ", ".join(subtopics)
+
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
         "Generate exactly 5 unique exam‑style questions. "
         "Every time you are asked, produce a completely different set. "
         f"Difficulty level: {difficulty}. "
-        "Use LaTeX formatting for ALL mathematical expressions. "
-        "Wrap every LaTeX expression in double dollar signs $$ ... $$. "
-        "Do NOT output plain text maths like x^2 or 1/6. "
+        f"Focus ONLY on these subtopics: {chosen}. "
+        "Use LaTeX formatting for ALL mathematical expressions, wrapped in $$ ... $$. "
         "Return the questions as a numbered list, one per line, no solutions."
     )
 
-    user_prompt = f"Create a {difficulty} worksheet on: {topic}"
+    user_prompt = f"Create a {difficulty} worksheet on {topic} covering: {chosen}"
 
     text = call_openai(system_prompt, user_prompt)
     questions = [q.strip() for q in text.split('\n') if q.strip()]
     return questions
+
 
 
 
@@ -83,6 +118,11 @@ def generate_similar_question(question, topic, difficulty):
 TOPICS = ["Probability", "Trigonometry", "Algebra", "Calculus"]
 
 topic = st.selectbox("Choose a topic:", TOPICS)
+subtopics = st.multiselect(
+    "Choose subtopics:",
+    SUBTOPICS.get(topic, [])
+)
+
 
 # Initialise session state
 if "questions" not in st.session_state:
@@ -97,17 +137,19 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("Easy Worksheet"):
         st.session_state.difficulty = "Easy"
-        st.session_state.questions = generate_worksheet(topic, "Easy")
+        st.session_state.questions = generate_worksheet(topic, subtopics, "Easy")
 
 with col2:
     if st.button("Medium Worksheet"):
         st.session_state.difficulty = "Medium"
-        st.session_state.questions = generate_worksheet(topic, "Medium")
+        st.session_state.questions = generate_worksheet(topic, subtopics, "Medium")
+
 
 with col3:
     if st.button("Hard Worksheet"):
         st.session_state.difficulty = "Hard"
-        st.session_state.questions = generate_worksheet(topic, "Hard")
+        st.session_state.questions = generate_worksheet(topic, subtopics, "Hard")
+
 
 
 # Display worksheet
