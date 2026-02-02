@@ -195,7 +195,7 @@ if st.session_state.questions:
 
     for i, q in enumerate(st.session_state.questions):
         with st.container():
-            st.write(f"### Question {i+1}")
+            st.markdown(f"### Question {i+1}")
             st.markdown(q)
 
             # Show Answer button
