@@ -72,7 +72,7 @@ def generate_worksheet(topic, subtopics, difficulty):
 
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Generate exactly 5 unique exam‑style questions. "
+        "Generate exactly 10 unique exam‑style questions. "
         f"Difficulty level: {difficulty}. "
         f"Focus ONLY on these subtopics: {chosen}. "
         "Use LaTeX formatting for ALL mathematical expressions. "
