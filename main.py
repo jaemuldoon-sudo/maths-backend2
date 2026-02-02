@@ -62,13 +62,15 @@ TOPICS = ["Probability", "Trigonometry", "Algebra", "Calculus"]
 
 topic = st.selectbox("Choose a topic:", TOPICS)
 
-# Store worksheet in session state so answers can appear dynamically
+# Initialise session state
 if "questions" not in st.session_state:
-    st.session_state.questions = None
+    st.session_state.questions = []
+
 
 # Generate worksheet button
 if st.button("Generate Worksheet", key="generate_ws"):
     st.session_state.questions = generate_worksheet(topic)
+
 
 # If worksheet exists, display it
 if st.session_state.questions:
@@ -78,6 +80,16 @@ if st.session_state.questions:
         with st.container():
             st.write(f"### Question {i+1}")
             st.write(q)
+
+            # Unique key for each answer button
+            if st.button(f"Show Answer to Q{i+1}", key=f"answer_btn_{i}"):
+                with st.spinner("Generating answer..."):
+                    answer = generate_answer(q, topic)
+                    st.write(f"**Answer to Question {i+1}:**")
+                    st.write(answer)
+
+        st.markdown("---")
+
 
 
 
