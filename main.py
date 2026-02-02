@@ -47,12 +47,15 @@ def generate_worksheet(topic):
 def generate_answer(question, topic):
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Provide a full step‑by‑step worked solution to the question."
+        "Provide a full step-by-step worked solution to the question. "
+        "Use LaTeX formatting for all mathematical expressions. "
+        "Wrap all LaTeX in double dollar signs $$ ... $$ so Streamlit renders it."
     )
 
     user_prompt = f"Topic: {topic}\nQuestion: {question}\nProvide the full solution."
 
     return call_openai(system_prompt, user_prompt)
+
 
 
 # ---------------------------------------------------------
