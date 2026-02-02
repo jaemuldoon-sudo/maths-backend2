@@ -22,7 +22,7 @@ def call_openai(system_prompt, user_prompt):
 
 
 # ---------------------------------------------------------
-# 2. Generate worksheet (returns a list of questions)
+# 2. Generate worksheet (returns list of questions)
 # ---------------------------------------------------------
 def generate_worksheet(topic):
     system_prompt = (
@@ -62,7 +62,8 @@ TOPICS = ["Probability", "Trigonometry", "Algebra", "Calculus"]
 
 topic = st.selectbox("Choose a topic:", TOPICS)
 
-if st.button("Generate Worksheet"):
+# Generate worksheet button
+if st.button("Generate Worksheet", key="generate_ws"):
     questions = generate_worksheet(topic)
 
     st.subheader(f"{topic} Worksheet")
@@ -72,12 +73,14 @@ if st.button("Generate Worksheet"):
         st.write(f"### Question {i+1}")
         st.write(q)
 
-        if st.button(f"Show Answer to Q{i+1}"):
+        # Unique key for each answer button
+        if st.button(f"Show Answer to Q{i+1}", key=f"answer_btn_{i}"):
             with st.spinner("Generating answer..."):
                 answer = generate_answer(q, topic)
                 st.write(answer)
 
         st.markdown("---")
+
 
 
 
