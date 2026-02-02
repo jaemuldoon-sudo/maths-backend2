@@ -2,6 +2,42 @@ import streamlit as st
 import os
 from openai import OpenAI
 
+
+st.markdown("""
+<style>
+/* Make the whole page responsive */
+.main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Improve button spacing on mobile */
+.stButton>button {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+}
+
+/* Improve selectbox and text input sizing */
+.stSelectbox, .stTextInput {
+    font-size: 1.1rem;
+}
+
+/* Prevent horizontal scrolling */
+.block-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+
+
+
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 st.title("Maths Tutor")
@@ -78,3 +114,6 @@ for action_label, action_function in ACTIONS.items():
         with st.spinner(f"Generating {action_label.lower()}..."):
             output = action_function(topic)
             st.write(output)
+
+
+s
