@@ -13,7 +13,8 @@ SUBTOPICS = {
         "Expected value",
         "Permutations and combinations",
         "Binomial distribution",
-        "Bernoulli Trials"
+        "Bernoulli Trials",
+        "Normal Distribution"
     ],
     "Trigonometry": [
         "Trig identities",
