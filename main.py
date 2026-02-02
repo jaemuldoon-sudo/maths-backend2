@@ -81,6 +81,7 @@ def generate_worksheet(topic, subtopics, difficulty):
 
 
 
+
 # ---------------------------------------------------------
 # 3. Generate answer for a single question
 # ---------------------------------------------------------
@@ -111,7 +112,24 @@ def generate_similar_question(question, topic, difficulty):
     user_prompt = f"Topic: {topic}\nDifficulty: {difficulty}\nOriginal question: {question}"
 
     return call_openai(system_prompt, user_prompt)
+    
 
+def generate_balanced_worksheet(topic, subtopics):
+    chosen = ", ".join(subtopics)
+
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate ONE exam‑style question for EACH of the selected subtopics. "
+        "Use LaTeX formatting for all mathematical expressions, wrapped in $$ ... $$. "
+        "Ensure each question is unique and non‑repetitive. "
+        "Return them as a numbered list, one per line, no solutions."
+    )
+
+    user_prompt = f"Topic: {topic}\nSubtopics: {chosen}\nGenerate one question per subtopic."
+
+    text = call_openai(system_prompt, user_prompt)
+    questions = [q.strip() for q in text.split("\n") if q.strip()]
+    return questions
 
 
 # ---------------------------------------------------------
@@ -134,23 +152,39 @@ if "difficulty" not in st.session_state:
 
 
 # Difficulty buttons
-col1, col2, col3 = st.columns(3)
+# --- Row 1: Easy / Medium / Hard ---
+row1_col1, row1_col2, row1_col3 = st.columns(3)
 
-with col1:
+with row1_col1:
     if st.button("Easy Worksheet"):
         st.session_state.difficulty = "Easy"
         st.session_state.questions = generate_worksheet(topic, subtopics, "Easy")
 
-with col2:
+with row1_col2:
     if st.button("Medium Worksheet"):
         st.session_state.difficulty = "Medium"
         st.session_state.questions = generate_worksheet(topic, subtopics, "Medium")
 
-
-with col3:
+with row1_col3:
     if st.button("Hard Worksheet"):
         st.session_state.difficulty = "Hard"
         st.session_state.questions = generate_worksheet(topic, subtopics, "Hard")
+
+
+# --- Row 2: Random / Balanced ---
+row2_col1, row2_col2 = st.columns(2)
+
+with row2_col1:
+    if st.button("Random Worksheet"):
+        import random
+        random_difficulty = random.choice(["Easy", "Medium", "Hard"])
+        st.session_state.difficulty = random_difficulty
+        st.session_state.questions = generate_worksheet(topic, subtopics, random_difficulty)
+
+with row2_col2:
+    if st.button("Balanced Worksheet"):
+        st.session_state.difficulty = "Balanced"
+        st.session_state.questions = generate_balanced_worksheet(topic, subtopics)
 
 
 
