@@ -26,8 +26,8 @@ def call_openai(system_prompt, user_prompt):
 # ---------------------------------------------------------
 def generate_worksheet(topic, difficulty):
     system_prompt = (
-        "You are a Leaving Cert Higher Level Maths tutor. "
-        "Generate exactly 5 unique exam‑style questions. "
+        "You are a Leaving Certificate Higher Level Maths tutor. "
+        "Generate exactly 10 unique exam‑style questions. "
         "Every time you are asked, produce a completely different set. "
         f"Difficulty level: {difficulty}. "
         "Use randomness and variation. "
@@ -47,14 +47,16 @@ def generate_worksheet(topic, difficulty):
 def generate_answer(question, topic, difficulty):
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Provide a full step‑by‑step worked solution. "
-        "Use LaTeX formatting wrapped in $$ ... $$. "
+        "Provide a full step-by-step worked solution. "
+        "Use LaTeX formatting for all mathematical expressions. "
+        "Wrap all LaTeX in double dollar signs $$ ... $$ so Streamlit renders it. "
         f"Match the difficulty level: {difficulty}."
     )
 
     user_prompt = f"Topic: {topic}\nDifficulty: {difficulty}\nQuestion: {question}"
 
     return call_openai(system_prompt, user_prompt)
+
 
 
 # ---------------------------------------------------------
