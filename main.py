@@ -4,7 +4,7 @@ from openai import OpenAI
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-st.title("Maths Tutor – Worksheet with Answers")
+st.title("Maths Tutor – Worksheet with Difficulty Levels")
 
 
 # ---------------------------------------------------------
@@ -24,42 +24,37 @@ def call_openai(system_prompt, user_prompt):
 # ---------------------------------------------------------
 # 2. Generate worksheet (returns list of questions)
 # ---------------------------------------------------------
-def generate_worksheet(topic):
+def generate_worksheet(topic, difficulty):
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Generate exactly 10 *unique* exam‑style questions on the topic. "
-        "Every time you are asked, produce a completely different set of questions. "
+        "Generate exactly 5 unique exam‑style questions. "
+        "Every time you are asked, produce a completely different set. "
+        f"Difficulty level: {difficulty}. "
         "Use randomness and variation. "
-        "Avoid repeating or rephrasing previous questions. "
         "Return them as a numbered list, one question per line, no solutions."
     )
 
-    user_prompt = f"Create a fresh worksheet on: {topic}"
+    user_prompt = f"Create a {difficulty} worksheet on: {topic}"
 
     text = call_openai(system_prompt, user_prompt)
-
-    # Split into individual questions
-    questions = [q.strip() for q in text.split("\n") if q.strip()]
-
+    questions = [q.strip() for q in text.split('\n') if q.strip()]
     return questions
-
 
 
 # ---------------------------------------------------------
 # 3. Generate answer for a single question
 # ---------------------------------------------------------
-def generate_answer(question, topic):
+def generate_answer(question, topic, difficulty):
     system_prompt = (
         "You are a Leaving Cert Higher Level Maths tutor. "
-        "Provide a full step-by-step worked solution to the question. "
-        "Use LaTeX formatting for all mathematical expressions. "
-        "Wrap all LaTeX in double dollar signs $$ ... $$ so Streamlit renders it."
+        "Provide a full step‑by‑step worked solution. "
+        "Use LaTeX formatting wrapped in $$ ... $$. "
+        f"Match the difficulty level: {difficulty}."
     )
 
-    user_prompt = f"Topic: {topic}\nQuestion: {question}\nProvide the full solution."
+    user_prompt = f"Topic: {topic}\nDifficulty: {difficulty}\nQuestion: {question}"
 
     return call_openai(system_prompt, user_prompt)
-
 
 
 # ---------------------------------------------------------
@@ -72,30 +67,46 @@ topic = st.selectbox("Choose a topic:", TOPICS)
 # Initialise session state
 if "questions" not in st.session_state:
     st.session_state.questions = []
+if "difficulty" not in st.session_state:
+    st.session_state.difficulty = None
 
 
-# Generate worksheet button
-if st.button("Generate Worksheet", key="generate_ws"):
-    st.session_state.questions = generate_worksheet(topic)
+# Difficulty buttons
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("Easy Worksheet"):
+        st.session_state.difficulty = "Easy"
+        st.session_state.questions = generate_worksheet(topic, "Easy")
+
+with col2:
+    if st.button("Medium Worksheet"):
+        st.session_state.difficulty = "Medium"
+        st.session_state.questions = generate_worksheet(topic, "Medium")
+
+with col3:
+    if st.button("Hard Worksheet"):
+        st.session_state.difficulty = "Hard"
+        st.session_state.questions = generate_worksheet(topic, "Hard")
 
 
-# If worksheet exists, display it
+# Display worksheet
 if st.session_state.questions:
-    st.subheader(f"{topic} Worksheet")
+    difficulty = st.session_state.difficulty
+    st.subheader(f"{topic} Worksheet ({difficulty})")
 
     for i, q in enumerate(st.session_state.questions):
         with st.container():
             st.write(f"### Question {i+1}")
             st.write(q)
 
-            # Unique key for each answer button
             if st.button(f"Show Answer to Q{i+1}", key=f"answer_btn_{i}"):
                 with st.spinner("Generating answer..."):
-                    answer = generate_answer(q, topic)
-                    st.write(f"**Answer to Question {i+1}:**")
-                    st.write(answer)
+                    answer = generate_answer(q, topic, difficulty)
+                    st.markdown(answer)
 
         st.markdown("---")
+
 
 
 
