@@ -61,11 +61,21 @@ def call_openai(client, system_prompt, user_prompt):
 # 2. Action functions
 # -----------------------------
 def generate_worksheet(topic):
-    return call_openai(
-        client,
-        "You are a Leaving Cert Higher Level Maths tutor. Generate a worksheet with 5 exam‑style questions. No solutions.",
-        f"Create a worksheet on: {topic}"
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate exactly 5 exam‑style questions on the topic. "
+        "Return them as a numbered list, one question per line, no solutions."
     )
+
+    user_prompt = f"Create a worksheet on: {topic}"
+
+    text = call_openai(client, system_prompt, user_prompt)
+
+    # Split into individual questions
+    questions = [q.strip() for q in text.split("\n") if q.strip()]
+
+    return questions
+
 
 def generate_exam_questions(topic):
     return call_openai(
@@ -87,6 +97,16 @@ def generate_solution(topic):
         "You are a Leaving Cert Higher Level Maths tutor. Provide a step‑by‑step worked solution to a typical question in this topic.",
         f"Give a worked solution for a typical {topic} question."
     )
+
+def generate_answer(question, topic):
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Provide a full step‑by‑step worked solution to the question."
+    )
+
+    user_prompt = f"Topic: {topic}\nQuestion: {question}\nProvide the full solution."
+
+    return call_openai(client, system_prompt, user_prompt)
 
 
 # -----------------------------
@@ -115,5 +135,17 @@ for action_label, action_function in ACTIONS.items():
             output = action_function(topic)
             st.write(output)
 
+    if st.button("Generate Worksheet"):
+        questions = generate_worksheet(topic)
+
+        st.subheader(f"{topic} Worksheet")
+
+        for i, q in enumerate(questions):
+            with st.container():
+                st.write(q)
+
+                if st.button(f"Show Answer to Q{i+1}"):
+                    answer = generate_answer(q, topic)
+                    st.write(answer)
 
 
