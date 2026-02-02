@@ -26,12 +26,14 @@ def call_openai(system_prompt, user_prompt):
 # ---------------------------------------------------------
 def generate_worksheet(topic, difficulty):
     system_prompt = (
-        "You are a Leaving Certificate Higher Level Maths tutor. "
-        "Generate exactly 10 unique exam‑style questions. "
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate exactly 5 unique exam‑style questions. "
         "Every time you are asked, produce a completely different set. "
         f"Difficulty level: {difficulty}. "
-        "Use randomness and variation. "
-        "Return them as a numbered list, one question per line, no solutions."
+        "Use LaTeX formatting for ALL mathematical expressions. "
+        "Wrap every LaTeX expression in double dollar signs $$ ... $$. "
+        "Do NOT output plain text maths like x^2 or 1/6. "
+        "Return the questions as a numbered list, one per line, no solutions."
     )
 
     user_prompt = f"Create a {difficulty} worksheet on: {topic}"
@@ -39,6 +41,7 @@ def generate_worksheet(topic, difficulty):
     text = call_openai(system_prompt, user_prompt)
     questions = [q.strip() for q in text.split('\n') if q.strip()]
     return questions
+
 
 
 # ---------------------------------------------------------
