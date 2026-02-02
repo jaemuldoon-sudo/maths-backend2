@@ -1,5 +1,49 @@
 import streamlit as st
 
+SUBTOPICS = {
+    "Probability": [
+        "Combined events",
+        "Conditional probability",
+        "Expected value",
+        "Permutations and combinations",
+        "Binomial distribution",
+        "Bernoulli Trials",
+        "Normal Distribution"
+    ],
+    "Trigonometry": [
+        "Trig identities",
+        "Trig equations",
+        "Graphs",
+        "Radians",
+        "Sine rule / Cosine rule",
+        "Unit Circle"
+    ],
+    "Algebra": [
+        "Quadratics",
+        "Functions",
+        "Logs",
+        "Sequences & series",
+        "Inequalities"
+    ],
+    
+    "Circle": [
+        "Center (0,0) and radius r",
+        "Center (h,k) and radius r",
+        "Equations of the form x^2 +y^2 + 2gx + 2gy + c = 0",
+        "Points outside, inside or on the Circle",
+        "Intersection of a line and circle"
+    ],
+    
+    "Calculus": [
+        "Differentiation",
+        "Integration",
+        "Rates of change",
+        "Area under curves",
+        "Product/Quotient/Chain rule"
+    ]
+}
+
+
 # -----------------------------
 # PAGE CONFIG
 # -----------------------------
@@ -27,7 +71,7 @@ st.markdown(
 # TOPIC + SUBTOPICS
 # -----------------------------
 st.markdown("### Choose Your Topic")
-topic = st.selectbox("", TOPICS)
+topic = st.selectbox("", topics)
 
 st.markdown("### Choose Subtopics")
 subtopics = st.multiselect(
