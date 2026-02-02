@@ -31,6 +31,15 @@ SUBTOPICS = {
         "Sequences & series",
         "Inequalities"
     ],
+    
+    "Circle": [
+        "Center (0,0) and radius r",
+        "Center (h,k) and radius r",
+        "Equations of the form x^2 +y^2 + 2gx + 2gy + c = 0",
+        "Points outside, inside or on the Circle",
+        "Intersection of a line and circle"
+    ],
+    
     "Calculus": [
         "Differentiation",
         "Integration",
@@ -144,7 +153,7 @@ def generate_balanced_worksheet(topic, subtopics):
 # ---------------------------------------------------------
 # 4. UI
 # ---------------------------------------------------------
-TOPICS = ["Probability", "Trigonometry", "Algebra", "Calculus"]
+TOPICS = ["Probability", "Trigonometry", "Algebra", "Circle", "Calculus"]
 
 topic = st.selectbox("Choose a topic:", TOPICS)
 subtopics = st.multiselect(
