@@ -61,6 +61,21 @@ def generate_answer(question, topic, difficulty):
     return call_openai(system_prompt, user_prompt)
 
 
+def generate_similar_question(question, topic, difficulty):
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate ONE new question that is similar in style and difficulty "
+        "to the given question, but not identical. "
+        "Use LaTeX formatting for all mathematical expressions, wrapped in $$ ... $$. "
+        f"Match the difficulty level: {difficulty}. "
+        "Do not provide a solution."
+    )
+
+    user_prompt = f"Topic: {topic}\nDifficulty: {difficulty}\nOriginal question: {question}"
+
+    return call_openai(system_prompt, user_prompt)
+
+
 
 # ---------------------------------------------------------
 # 4. UI
@@ -101,16 +116,25 @@ if st.session_state.questions:
     st.subheader(f"{topic} Worksheet ({difficulty})")
 
     for i, q in enumerate(st.session_state.questions):
-        with st.container():
-            st.write(f"### Question {i+1}")
-            st.write(q)
+    with st.container():
+        st.write(f"### Question {i+1}")
+        st.markdown(q)
 
-            if st.button(f"Show Answer to Q{i+1}", key=f"answer_btn_{i}"):
-                with st.spinner("Generating answer..."):
-                    answer = generate_answer(q, topic, difficulty)
-                    st.markdown(answer)
+        # Show Answer button
+        if st.button(f"Show Answer to Q{i+1}", key=f"answer_btn_{i}"):
+            with st.spinner("Generating answer..."):
+                answer = generate_answer(q, topic, difficulty)
+                st.markdown(answer)
 
-        st.markdown("---")
+        # More Questions Like This button
+        if st.button(f"More Questions Like This (Q{i+1})", key=f"more_like_{i}"):
+            with st.spinner("Generating similar question..."):
+                similar = generate_similar_question(q, topic, difficulty)
+                st.markdown(f"**Another question like Q{i+1}:**")
+                st.markdown(similar)
+
+    st.markdown("---")
+
 
 
 
