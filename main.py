@@ -1,4 +1,13 @@
 import streamlit as st
+import os
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# -----------------------------
+# TOPICS + SUBTOPICS
+# -----------------------------
+TOPICS = ["Probability", "Trigonometry", "Algebra", "Circle", "Calculus"]
 
 SUBTOPICS = {
     "Probability": [
@@ -25,7 +34,6 @@ SUBTOPICS = {
         "Sequences & series",
         "Inequalities"
     ],
-    
     "Circle": [
         "Center (0,0) and radius r",
         "Center (h,k) and radius r",
@@ -33,7 +41,6 @@ SUBTOPICS = {
         "Points outside, inside or on the Circle",
         "Intersection of a line and circle"
     ],
-    
     "Calculus": [
         "Differentiation",
         "Integration",
@@ -43,14 +50,94 @@ SUBTOPICS = {
     ]
 }
 
+# -----------------------------
+# OPENAI CALL
+# -----------------------------
+def call_openai(system_prompt, user_prompt):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+    )
+    return response.choices[0].message.content
+
+
+# -----------------------------
+# WORKSHEET GENERATORS
+# -----------------------------
+def generate_worksheet(topic, subtopics, difficulty):
+    chosen = ", ".join(subtopics)
+
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate exactly 5 unique exam‑style questions. "
+        f"Difficulty level: {difficulty}. "
+        f"Focus ONLY on these subtopics: {chosen}. "
+        "Use LaTeX formatting for ALL mathematical expressions. "
+        "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Do NOT output plain text maths like x^2 or 1/6. "
+        "Return the questions as a numbered list, one per line, no solutions."
+    )
+
+    user_prompt = (
+        f"Create a {difficulty} worksheet on {topic}. "
+        f"Subtopics: {chosen}. "
+        "Ensure ALL maths is in LaTeX wrapped in $$ ... $$."
+    )
+
+    text = call_openai(system_prompt, user_prompt)
+    return [q.strip() for q in text.split("\n") if q.strip()]
+
+
+def generate_balanced_worksheet(topic, subtopics):
+    chosen = ", ".join(subtopics)
+
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate ONE exam‑style question for EACH selected subtopic. "
+        "Use LaTeX formatting wrapped in $$ ... $$. "
+        "Return a numbered list, no solutions."
+    )
+
+    user_prompt = f"Topic: {topic}\nSubtopics: {chosen}"
+
+    text = call_openai(system_prompt, user_prompt)
+    return [q.strip() for q in text.split("\n") if q.strip()]
+
+
+def generate_answer(question, topic, difficulty):
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Provide a full step‑by‑step worked solution. "
+        "Use LaTeX formatting wrapped in $$ ... $$. "
+        f"Match the difficulty: {difficulty}."
+    )
+
+    user_prompt = f"Topic: {topic}\nQuestion: {question}"
+
+    return call_openai(system_prompt, user_prompt)
+
+
+def generate_similar_question(question, topic, difficulty):
+    system_prompt = (
+        "You are a Leaving Cert Higher Level Maths tutor. "
+        "Generate ONE new question similar in style and difficulty "
+        "but not identical. "
+        "Use LaTeX formatting wrapped in $$ ... $$. "
+        "No solution."
+    )
+
+    user_prompt = f"Topic: {topic}\nOriginal question: {question}"
+
+    return call_openai(system_prompt, user_prompt)
+
 
 # -----------------------------
 # PAGE CONFIG
 # -----------------------------
-st.set_page_config(
-    page_title="LC Maths Tutor",
-    layout="centered",
-)
+st.set_page_config(page_title="LC Maths Tutor", layout="centered")
 
 # -----------------------------
 # BRAND HEADER
@@ -71,7 +158,7 @@ st.markdown(
 # TOPIC + SUBTOPICS
 # -----------------------------
 st.markdown("### Choose Your Topic")
-topic = st.selectbox("", topics)
+topic = st.selectbox("", TOPICS)
 
 st.markdown("### Choose Subtopics")
 subtopics = st.multiselect(
@@ -81,6 +168,14 @@ subtopics = st.multiselect(
 )
 
 st.markdown("---")
+
+# -----------------------------
+# SESSION STATE
+# -----------------------------
+if "questions" not in st.session_state:
+    st.session_state.questions = []
+if "difficulty" not in st.session_state:
+    st.session_state.difficulty = None
 
 # -----------------------------
 # WORKSHEET BUTTONS (MOBILE‑FIRST)
@@ -125,8 +220,8 @@ st.markdown("---")
 # -----------------------------
 # DISPLAY WORKSHEET
 # -----------------------------
-questions = st.session_state.get("questions", [])
-difficulty = st.session_state.get("difficulty", None)
+questions = st.session_state.questions
+difficulty = st.session_state.difficulty
 
 if questions:
     st.markdown(
@@ -157,6 +252,7 @@ if questions:
             """,
             unsafe_allow_html=True
         )
+
         st.markdown(q)
 
         b1, b2 = st.columns(2)
