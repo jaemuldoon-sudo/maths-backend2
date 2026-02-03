@@ -76,9 +76,14 @@ def generate_worksheet(topic, subtopics, difficulty):
         f"Difficulty level: {difficulty}. "
         f"Focus ONLY on these subtopics: {chosen}. "
         "Use LaTeX formatting for ALL mathematical expressions. "
+        "Use ONLY inline LaTeX with single dollar signs: $ ... $."
         "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Never use $$ ... $$ under any circumstances."
+        "Never output plain text maths such as x^2, 1/6, sqrt(x), etc."
+        "Every mathematical expression must be inside $ ... $."
         "Do NOT output plain text maths like x^2 or 1/6. "
         "Return the questions as a numbered list, one per line, no solutions."
+
     )
 
     user_prompt = (
@@ -98,6 +103,12 @@ def generate_balanced_worksheet(topic, subtopics):
         "You are a Leaving Cert Higher Level Maths tutor. "
         "Generate ONE exam‑style question for EACH selected subtopic. "
         "Use LaTeX formatting wrapped in $$ ... $$. "
+        "Use ONLY inline LaTeX with single dollar signs: $ ... $."
+        "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Never use $$ ... $$ under any circumstances."
+        "Never output plain text maths such as x^2, 1/6, sqrt(x), etc."
+        "Every mathematical expression must be inside $ ... $."
+        "Do NOT output plain text maths like x^2 or 1/6. "
         "Return a numbered list, no solutions."
     )
 
@@ -112,6 +123,12 @@ def generate_answer(question, topic, difficulty):
         "You are a Leaving Cert Higher Level Maths tutor. "
         "Provide a full step‑by‑step worked solution. "
         "Use LaTeX formatting wrapped in $$ ... $$. "
+        "Use ONLY inline LaTeX with single dollar signs: $ ... $."
+        "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Never use $$ ... $$ under any circumstances."
+        "Never output plain text maths such as x^2, 1/6, sqrt(x), etc."
+        "Every mathematical expression must be inside $ ... $."
+        "Do NOT output plain text maths like x^2 or 1/6. "
         f"Match the difficulty: {difficulty}."
     )
 
@@ -126,6 +143,12 @@ def generate_similar_question(question, topic, difficulty):
         "Generate ONE new question similar in style and difficulty "
         "but not identical. "
         "Use LaTeX formatting wrapped in $$ ... $$. "
+        "Use ONLY inline LaTeX with single dollar signs: $ ... $."
+        "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Never use $$ ... $$ under any circumstances."
+        "Never output plain text maths such as x^2, 1/6, sqrt(x), etc."
+        "Every mathematical expression must be inside $ ... $."
+        "Do NOT output plain text maths like x^2 or 1/6. "
         "No solution."
     )
 
@@ -148,6 +171,12 @@ def generate_exam_style_worksheet(topic, subtopics):
         "Do NOT quote or reproduce any past exam paper. "
         "Only create new, original questions inspired by the general LC style. "
         "Use LaTeX formatting for ALL mathematical expressions, wrapped in $$ ... $$. "
+        "Use ONLY inline LaTeX with single dollar signs: $ ... $."
+        "Wrap EVERY LaTeX expression in $$ ... $$. "
+        "Never use $$ ... $$ under any circumstances."
+        "Never output plain text maths such as x^2, 1/6, sqrt(x), etc."
+        "Every mathematical expression must be inside $ ... $."
+        "Do NOT output plain text maths like x^2 or 1/6. "
         "Return exactly 3 exam‑style questions, each possibly multi‑part, no solutions."
     )
 
@@ -241,7 +270,7 @@ with c4:
 
 with c5:
     if st.button("Balanced", use_container_width=True):
-        st.session_state.difficulty = "Balanced"
+        # st.session_state.difficulty = "Balanced"
         st.session_state.questions = generate_balanced_worksheet(topic, subtopics)
 
 with c6:
