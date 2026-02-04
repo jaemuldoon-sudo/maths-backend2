@@ -7,6 +7,25 @@ st.set_page_config(
 )
 
 # ------------------ CUSTOM CSS ------------------
+
+# Hide the sidebar completely
+st.markdown("""
+    <style>
+        [data-testid="stSidebar"] {
+            display: none;
+        }
+        [data-testid="stSidebarNav"] {
+            display: none;
+        }
+        /* Expand main content to full width */
+        .block-container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.markdown("""
 <style>
 
