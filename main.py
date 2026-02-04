@@ -233,7 +233,10 @@ st.markdown("---")
 if "questions" not in st.session_state:
     st.session_state.questions = []
 if "difficulty" not in st.session_state:
-    st.session_state.difficulty = None
+    st.session_state.difficulty = 
+if "similar_questions" not in st.session_state:
+    st.session_state.similar_questions = {}
+
 
 # -----------------------------
 # WORKSHEET BUTTONS (MOBILE‑FIRST)
