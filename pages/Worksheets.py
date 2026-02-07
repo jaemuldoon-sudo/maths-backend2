@@ -3,6 +3,8 @@ import os
 from openai import OpenAI
 
 # Hide the sidebar on this page
+
+
 st.markdown("""
     <style>
         /* Completely remove the sidebar container */
@@ -17,6 +19,8 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
+
 
 
 
