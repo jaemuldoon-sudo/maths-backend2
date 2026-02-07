@@ -5,18 +5,19 @@ from openai import OpenAI
 # Hide the sidebar on this page
 st.markdown("""
     <style>
-        [data-testid="stSidebar"] {
-            display: none;
+        /* Completely remove the sidebar container */
+        section[data-testid="stSidebar"] {
+            display: none !important;
         }
-        [data-testid="stSidebarNav"] {
-            display: none;
-        }
-        .block-container {
-            padding-left: 2rem;
-            padding-right: 2rem;
+
+        /* Expand main content to full width */
+        div[data-testid="stAppViewBlockContainer"] {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 

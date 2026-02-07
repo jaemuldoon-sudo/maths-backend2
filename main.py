@@ -161,6 +161,7 @@ def generate_exam_style_worksheet(topic, subtopics):
     chosen = ", ".join(subtopics)
 
     system_prompt = (
+
         "You are a Leaving Cert Higher Level Maths examiner. "
         "Generate questions that follow the style, structure, tone, and difficulty "
         "of real LC Higher Level exam papers. "
