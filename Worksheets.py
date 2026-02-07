@@ -215,15 +215,15 @@ st.markdown(
 # -----------------------------
 # TOPIC + SUBTOPICS
 # -----------------------------
-#st.markdown("### Choose Your Topic")
-#topic = st.selectbox("", TOPICS)
+st.markdown("### Choose Your Topic")
+topic = st.selectbox("", TOPICS)
 
-#st.markdown("### Choose Subtopics")
-#subtopics = st.multiselect(
-#   "",
-#    SUBTOPICS.get(topic, []),
-#    placeholder="Pick 1–5 subtopics"
-#)
+st.markdown("### Choose Subtopics")
+subtopics = st.multiselect(
+   "",
+    SUBTOPICS.get(topic, []),
+    placeholder="Pick 1–5 subtopics"
+)
 
 st.markdown("---")
 
