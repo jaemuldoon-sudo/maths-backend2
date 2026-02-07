@@ -120,7 +120,7 @@ with col2:
 
 with col3:
     st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### 📊 Progress (coming soon)")
+    st.markdown("### 📊 Progress (coming so0000on)")
     st.write("Track your accuracy, weak topics, and improvement over time.")
     st.button("Progress Dashboard", disabled=True)
     st.markdown('</div>', unsafe_allow_html=True)
