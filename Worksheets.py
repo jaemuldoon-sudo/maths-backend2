@@ -197,6 +197,30 @@ def generate_exam_style_worksheet(topic, subtopics):
 # -----------------------------
 st.set_page_config(page_title="LC Maths Tutor", layout="centered")
 
+# REMOVE LEFT SIDEBAR COMPLETELY
+st.markdown("""
+    <style>
+        /* Hide the entire sidebar */
+        section[data-testid="stSidebar"] {
+            display: none !important;
+        }
+
+        /* Expand main content to full width */
+        div[data-testid="stAppViewBlockContainer"] {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+
+        /* Optional: remove the blank space where the sidebar used to be */
+        div[data-testid="stAppViewContainer"] > div:first-child {
+            padding-left: 0 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
+
+
 # -----------------------------
 # BRAND HEADER
 # -----------------------------
