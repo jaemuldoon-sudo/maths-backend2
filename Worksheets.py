@@ -196,7 +196,7 @@ def generate_exam_style_worksheet(topic, subtopics):
 # -----------------------------
 # PAGE CONFIG
 # -----------------------------
-st.set_page_config(page_title="LC Maths Tutor", layout="centered")
+st.set_page_config(page_title="Leaving Certificate Honours Worksheet", layout="centered")
 
 # REMOVE LEFT SIDEBAR COMPLETELY
 st.markdown("""
