@@ -25,7 +25,8 @@ SUBTOPICS = {
         "Graphs",
         "Radians",
         "Sine rule / Cosine rule",
-        "Unit Circle"
+        "Unit Circle",
+        "Pythagoras theorem"
     ],
     "Algebra": [
         "Quadratics",
