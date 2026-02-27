@@ -7,7 +7,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # -----------------------------
 # TOPICS + SUBTOPICS
 # -----------------------------
-TOPICS = ["Probability", "Trigonometry", "Algebra", "Circle", "Calculus"]
+TOPICS = ["Probabeeeeeility", "Trigonometry", "Algebra", "Circle", "Calculus"]
 
 SUBTOPICS = {
     "Probability": [
